@@ -1,0 +1,208 @@
+/******************************************************************************
+Eric Zhang
+Comp Sci 3
+May 13, 2021
+Card games Program
+*******************************************************************************/
+//Extras: quit option, double down,
+
+//try for more extras
+
+import java.io.*;
+public class Main
+{
+    public static void win (boolean d)
+    {
+        if (d)
+        {
+            System.out.print("\nYou Win Double!");
+        }
+        else
+        {
+             System.out.print("\nYou Win!");
+        }
+    }
+    public static void tie ()
+    {
+        
+        System.out.print("\nPush!");
+    }
+    public static void lose (boolean d)
+    {
+        if (d)
+        {
+            System.out.print("\nYou Lose Double!");
+        }
+        else
+        {
+            System.out.print("\nYou Lose!");
+        }
+    }
+    public static int dealerdraw (BlackjackHand temp, Deck deck)
+    {
+        Card current;
+        int total;
+        current = deck.dealCard();
+        temp.addCard (current);
+        System.out.println("\nThe dealer's next card is a "+current.showValue()+" of "+ current.getSuit()+ ".");
+        total = temp.getValue();
+        System.out.print("\nThe dealer has "+ total + ".");
+        return total;
+    }
+    public static String cap (String word)
+    {
+        word = word.toUpperCase();
+        return word;
+    }
+    public static int check (BlackjackHand temp)
+    {
+        int ret;
+        int total;
+        total = temp.getValue();
+        if (total < 21)
+        {
+            ret = -1;
+        }
+        else if (total == 21)
+        {
+            ret = 0;
+        }
+        else 
+        {
+            ret = 1;
+        }
+        return ret;
+    }
+	public static void main(String[] args) throws IOException
+	{
+	    DataInputStream reader = new DataInputStream(System.in);
+		Card current;
+		String choice;
+		int over;
+		boolean d;
+		Deck deck;
+		String again = "Y";
+		int check;
+		Card deal;
+		int temp;
+		BlackjackHand player = new BlackjackHand();
+		BlackjackHand dealer = new BlackjackHand();
+		int playertotal;
+		int dealertotal;
+		while (again.equals("Y"))
+		{
+		    deck = new Deck ();
+		    player.clearHand();
+		    dealer.clearHand();
+		    playertotal = 0;
+		    d = false;
+		    dealertotal = 0;
+    		deck.shuffle();
+    		System.out.println("Welcome to E.Z. Blackjack Palace! ");
+    		//give player 1st card
+    		current = deck.dealCard();
+    		player.addCard (current);
+    		System.out.println("\nYour first card is the " +current.showValue()+" of "+ current.getSuit()+ "."); 
+    		//give dealer 1st card faced down
+    		deal = deck.dealCard();
+    		dealer.addCard (deal);
+    		
+    		//give player 2nd card
+    		current = deck.dealCard();
+    		player.addCard (current);
+    		
+    		System.out.println("Your second card is the "+current.showValue()+" of "+ current.getSuit()+ ".");
+    		playertotal = player.getValue();
+    		System.out.println("You have " + playertotal + ".");
+    		check = check (player);
+    		if (check == 0)
+    		{
+    		    win(d);
+    		}
+    		else 
+    		{
+    		    //give dealer 2nd card faced up
+    		    current = deck.dealCard();
+        		dealer.addCard (current);
+        		System.out.println("\nThe dealer is showing a "+current.showValue()+" of "+ current.getSuit()+ ".");
+    		    System.out.print("\nWould you like to hit stay or double down? (H/S/D): ");
+    		    choice = reader.readLine();
+            	choice = cap(choice);
+            	if (choice.equals("D"))
+            	{
+            	    current = deck.dealCard();
+    		        player.addCard (current);
+    		        System.out.println("Your next card is "+current.showValue()+" of "+ current.getSuit()+ ".");
+    		        playertotal = player.getValue();
+    		        System.out.println("You have " + playertotal + ".");
+    		        d = true;
+            	}
+            	while (choice.equals ("H"))
+            	{
+            	    current = deck.dealCard();
+    		        player.addCard (current);
+    		        System.out.println("Your next card is "+current.showValue()+" of "+ current.getSuit()+ ".");
+    		        playertotal = player.getValue();
+    		        System.out.println("You have " + playertotal + ".");
+    		        check = check (player);
+                	if ((check == 0) || (check == 1))
+                	{
+                	    choice = "S";
+                	}
+                	else
+                	{
+                	    System.out.print ("\nWould you like to hit or stay? (H/S): ");
+    		            choice = reader.readLine();
+                	    choice = cap(choice);
+                	}
+                	
+            	}
+            	
+            	check = check (player);
+            	if (check == 0)
+    		    {
+    		        win(d);
+    		    }
+    		    else if (check == 1)
+    		    {
+    		        lose(d);
+    		    }
+    		    else 
+    		    {
+    		        System.out.print("\nThe dealer was holding a " + deal.showValue() +" of " + deal.getSuit()+".");
+    		        while (dealertotal < 17)
+    		        {
+    		            dealertotal = dealerdraw (dealer, deck);
+    		        }
+    		        check = check (dealer);
+    		        if (check == 0)
+    		        {
+    		            lose(d);
+    		        }
+    		        else if (check > 0)
+    		        {
+    		            win(d);
+    		        }
+    		        else
+    		        {
+    		            if ((playertotal - dealertotal) > 0)
+    		            {
+    		                win(d);
+    		            }
+    		            else if ((playertotal - dealertotal) == 0)
+    		            {
+    		                tie();
+    		            }
+    		            else
+    		            {
+    		                lose(d);
+    		            }
+    		        }
+    		    }
+    		}
+    		    System.out.print("\n\nWould you like to play again? (y/n): ");
+            	again = reader.readLine();
+        	    again = cap(again);
+    	}
+	}
+}
