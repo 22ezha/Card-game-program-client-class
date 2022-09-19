@@ -1,0 +1,44 @@
+/******************************************************************************
+Eric Zhang
+Comp Sci 3
+May 13, 2021
+Card games Program
+*******************************************************************************/
+public class BlackjackHand extends Hand
+{
+    
+    public BlackjackHand ()
+    {
+        super ();
+    }
+    //Get the value of the Hand 
+    public int getValue ()
+    {
+        Card current;
+        int cardVal = 0;
+        int handVal = 0;
+        boolean ace = false;
+        for (int i = 0; i < super.getSize(); i++)
+        {
+            current = super.getCard(i);
+            cardVal = current.getValue();
+            //check if 1 or 11 for Aces
+            if (cardVal > 10)
+            {
+                cardVal = 10;
+            }
+            else if (cardVal ==1)
+            {
+                ace = true;
+            }
+            handVal += cardVal;
+            
+            
+        }
+        if ((ace == true) && ((handVal + 10) <= 21))
+            {
+                handVal += 10;
+            }
+        return handVal;
+    }
+}
