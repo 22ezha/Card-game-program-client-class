@@ -1,0 +1,42 @@
+/******************************************************************************
+Eric Zhang
+Comp Sci 3
+May 13, 2021
+Card games Program
+*******************************************************************************/
+import java.util.ArrayList;
+public class Hand
+{
+    private ArrayList <Card> hand;
+    
+    public Hand ()
+    {
+        hand = new ArrayList <Card> ();
+    }
+    public void addCard (Card card)
+    {
+        hand.add (card);
+    }
+    public void removeCard (int num)
+    {
+        hand.remove (num);
+    }
+    public void removeCard (Card temp)
+    {
+        hand.remove (temp);
+    }
+    public void clearHand ()
+    {
+        hand.clear();
+    }
+    //Get a card from the hand
+    public Card getCard (int cardNum)
+    {
+        return hand.get(cardNum);
+    }
+    //Get the size of the hand
+    public int getSize ()
+    {
+        return hand.size();
+    }
+}
